@@ -34,19 +34,22 @@ namespace FeatureSwitches.Models
 
             modelBuilder.Entity<FeatureAccess>(entity =>
             {
-                entity.HasKey(e => e.FeatureId);
-
                 entity.ToTable("FeatureAccess");
 
-                entity.Property(e => e.FeatureId)
-                    .HasColumnType("numeric(18, 0)")
-                    .HasColumnName("FeatureID");
+                entity.HasIndex(e => new { e.FeatureName, e.Email }, "UQ_FeatureAccess")
+                    .IsUnique();
 
-                entity.Property(e => e.FeatureName).HasMaxLength(150);
+                entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.IsAccessible).HasColumnName("isAccessible");
+                entity.Property(e => e.Email)
+                    .HasMaxLength(250)
+                    .HasColumnName("email");
 
-                entity.Property(e => e.UserEmail).HasMaxLength(250);
+                entity.Property(e => e.Enable).HasColumnName("enable");
+
+                entity.Property(e => e.FeatureName)
+                    .HasMaxLength(150)
+                    .HasColumnName("featureName");
             });
 
             OnModelCreatingPartial(modelBuilder);
